@@ -18,13 +18,6 @@ function Login() {
   const token = useSelector((state) => state.user.userToken);
   const [loading, setLoading] = React.useState(false);
 
-  // useEffect if user is already logged in
-  React.useEffect(() => {
-    if (user && token) {
-      navigate("/", { replace: true });
-    }
-  }, [user, token]);
-
   const onFinish = (values) => {
     console.log("Success:", values);
     setLoading(true);
@@ -32,18 +25,17 @@ function Login() {
     let data = {
       email: values.email,
       password: values.password,
-      devideId: "123456789",
     };
     Post(AUTH.signin, data)
       .then((response) => {
         setLoading(false);
-        if (response?.data) {
-          console.log("response", response.data.token);
-          console.log("response", response.data.user);
+        console.log("response", response.data);
+        if (response?.data?.status) {
+          console.log("responsess", response.data?.data.user);
           dispatch(
-            addUser({ user: response.data.user, token: response.data.token })
+            addUser({ user: response.data?.data?.user, token: response.data?.data.token })
           );
-          navigate("/", { replace: true });
+          navigate("/dashboard", { replace: true });
         } else {
           swal("Oops!", response.response.data.message, "error");
         }
@@ -196,13 +188,36 @@ function Login() {
                       cursor: "pointer",
                       width: "100%",
                     }}
-                    onClick={() => navigate("/dashboard")}
+                    // onClick={() => navigate("/dashboard")}
                   >
                     {loading ? "Loading..." : "Continue"}
                   </Button>
                 </Form.Item>
               </Form>
               <div>
+                <Divider>or</Divider>
+
+                <Button
+                  type="primary"
+                  htmlType="button"
+                  className="social-btn"
+                  style={{
+                    cursor: "pointer",
+                    width: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    fontWeight:"bold",
+                    justifyContent: "center",
+                    gap: "30px"
+                  }}
+                  onClick={() => navigate("/signup")}
+                >
+                  
+                  Sign Up for a new account
+                </Button>
+              </div>
+
+              {/* <div>
                 <Divider>or</Divider>
 
                 <Button
@@ -248,7 +263,8 @@ function Login() {
                   />
                   Sign in with Google
                 </Button>
-              </div>
+              </div> */}
+          
             </div>
           </Col>
         </Row>

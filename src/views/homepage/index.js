@@ -22,11 +22,7 @@ function Homepage() {
   const [loading, setLoading] = React.useState(false);
 
   // useEffect if user is already logged in
-  React.useEffect(() => {
-    if (user && token) {
-      navigate("/", { replace: true });
-    }
-  }, [user, token]);
+
 
   const onFinish = (values) => {
     console.log("Success:", values);
@@ -83,7 +79,7 @@ function Homepage() {
             >
               {loading ? "Loading..." : "Continue"}
             </Button>
-            <p>Last cash out done on 24/08/2023 at 11:00</p>
+            {/* <p>Last cash out done on 24/08/2023 at 11:00</p> */}
 
             <ProfileCards />
             <DashboardTable />

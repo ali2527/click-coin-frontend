@@ -8,30 +8,26 @@ const AnalyticsCarts = () => {
         {
             imageSrc: Vectr1,
             title: "Total Earnings",
-            dolarnumbers: "$2500",
+            dolarnumbers: "$0",
         },
         {
             imageSrc: Vectr1,
             title: "App Install Earnings",
-            dolarnumbers: "150",
+            dolarnumbers: "0",
         },
         {
             imageSrc: Vectr1,
             title: "Google Ads. Revenue",
-            dolarnumbers: "$5k",
+            dolarnumbers: "$0",
         },
         {
             imageSrc: Vectr1,
             title: "Challenges Earnings",
-            dolarnumbers: "450",
+            dolarnumbers: "0",
         },
     ];
 
-    const prodata = {
-        proimg: Elip26,
-        proname: "Farrukh Khaan",
-        proemal: "@farrukh.khan",
-      };
+
     return (
         <div className="trustpeople-box">
             <Row style={{ width: "100%", justifyContent: "center" }}>

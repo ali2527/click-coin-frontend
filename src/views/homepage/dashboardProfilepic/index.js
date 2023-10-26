@@ -1,24 +1,34 @@
-import { Col, Row, Image, Button, Card } from "antd";
+import { Col, Row, Image, Button, Card, Avatar } from "antd";
 import "react-alice-carousel/lib/alice-carousel.css";
 import Elip26 from "../../../assets/elip26.png";
 import Vectr1 from "../../../assets/vectr1.png";
+import { useNavigate } from "react-router";
+import { useSelector, useDispatch } from "react-redux";
+import { UPLOADS_URL } from "../../../config/constants/api";
+
 
 const Trustedpeople = () => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const user = useSelector((state) => state.user.userData);
+    const token = useSelector((state) => state.user.userToken);
+
+
     const cardsdata = [
         {
             imageSrc: Vectr1,
             title: "Total Earnings",
-            dolarnumbers: "$2500",
+            dolarnumbers: "$0",
         },
         {
             imageSrc: Vectr1,
             title: "Weekly Earnings",
-            dolarnumbers: "50",
+            dolarnumbers: "0",
         },
         {
             imageSrc: Vectr1,
             title: "Balance",
-            dolarnumbers: "60",
+            dolarnumbers: "0",
         },
     ];
 
@@ -35,15 +45,10 @@ const Trustedpeople = () => {
                         <Row justify={"center"} style={{ alignItems: "center" }}>
                             <Col xs={24} md={12}>
                                 <div className="dashboard-profile">
-                                    <Image
-                                        preview={false}
-                                        alt={"Failed to load image"}
-                                        src={prodata.proimg}
-                                        className="forimg-border"
-                                    />
+                                    <Avatar src={user.image ? UPLOADS_URL + "/" +  user.image : "./images1/avatar.png"} size={80} />
                                     <div>
-                                        <h3>{prodata.proname}</h3>
-                                        <span>{prodata.proemal}</span>
+                                        <h3>{user.firstName + " " +  user.lastName }</h3>
+                                        <span>@{user.username}</span>
                                     </div>
                                 </div>
                             </Col>

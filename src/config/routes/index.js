@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-// import AdminAuthCheck from "../../components/AuthCheck/AdminAuthCheck";
+import AuthCheck from "../../components/AuthCheck/UserAuthCheck";
 import ClientLayout from "../../components/ClientLayout";
 import Homepage from "../../views/homepage";
 import Analytics from "../../views/analytics";
@@ -16,7 +16,7 @@ import PaymentLog from "../../views/paymentLog";
 import Cashout from "../../views/cashout";
 import CashoutAmount from "../../views/cashoutAmount";
 import Faq from "../../views/faq";
-
+import Signup from "../../views/signup"
 
 import UserAuthCheck from "../../components/AuthCheck/UserAuthCheck";
 const MyRouter = () => {
@@ -26,196 +26,206 @@ const MyRouter = () => {
         <Route
           path="/dashboard"
           index
-          element={
+          element={ 
+            <AuthCheck>
             <ClientLayout
               head={{ title: "Dashboard", description: "Some Description." }}
               headerStyle={{ height: { base: "40px", md: 14 } }}
             >
               <Homepage />
             </ClientLayout>
+            </AuthCheck>
           }
         />
         <Route
           path="/"
           index
           element={
-            <ClientLayout
-              head={{ title: "Dashboard", description: "Some Description." }}
-              headerStyle={{ height: { base: "40px", md: 14 } }}
-            >
+          
               <Login />
-            </ClientLayout>
+        
           }
         />
+
+<Route
+          path="/signup"
+          index
+          element={
+          
+              <Signup />
+        
+          }
+        />
+
         <Route
           path="/analytics"
           index
           element={
+            <AuthCheck>
             <ClientLayout
               head={{ title: "Dashboard", description: "Some Description." }}
               headerStyle={{ height: { base: "40px", md: 14 } }}
             >
               <Analytics />
             </ClientLayout>
+            </AuthCheck>
           }
         />
         <Route
           path="/campaigns"
           index
           element={
+            <AuthCheck>
             <ClientLayout
               head={{ title: "Dashboard", description: "Some Description." }}
               headerStyle={{ height: { base: "40px", md: 14 } }}
             >
               <Campaigns />
             </ClientLayout>
+            </AuthCheck>
           }
         />
         <Route
-          path="/campaignsDetails"
+          path="/campaignsDetails/:id"
           index
           element={
+            <AuthCheck>
             <ClientLayout
               head={{ title: "Dashboard", description: "Some Description." }}
               headerStyle={{ height: { base: "40px", md: 14 } }}
             >
               <CampaignsDetails />
             </ClientLayout>
+            </AuthCheck>
           }
         />
         <Route
           path="/requestLink"
           index
           element={
+            <AuthCheck>
             <ClientLayout
               head={{ title: "Dashboard", description: "Some Description." }}
               headerStyle={{ height: { base: "40px", md: 14 } }}
             >
               <RequestLink />
             </ClientLayout>
+            </AuthCheck>
           }
         />
         <Route
           path="/settings"
           index
           element={
+            <AuthCheck>
             <ClientLayout
               head={{ title: "Dashboard", description: "Some Description." }}
               headerStyle={{ height: { base: "40px", md: 14 } }}
             >
               <Settings />
             </ClientLayout>
+            </AuthCheck>
           }
         />
         <Route
           path="/profileSettings"
           index
           element={
+            <AuthCheck>
             <ClientLayout
               head={{ title: "Dashboard", description: "Some Description." }}
               headerStyle={{ height: { base: "40px", md: 14 } }}
             >
               <ProfileSettings />
             </ClientLayout>
+            </AuthCheck>
           }
         />
         <Route
           path="/linkAccount"
           index
           element={
+            <AuthCheck>
             <ClientLayout
               head={{ title: "Dashboard", description: "Some Description." }}
               headerStyle={{ height: { base: "40px", md: 14 } }}
             >
               <LinkAccount />
             </ClientLayout>
+            </AuthCheck>
           }
         />
         <Route
           path="/topRanking"
           index
           element={
+            <AuthCheck>
             <ClientLayout
               head={{ title: "Dashboard", description: "Some Description." }}
               headerStyle={{ height: { base: "40px", md: 14 } }}
             >
               <TopRanking />
             </ClientLayout>
+            </AuthCheck>
           }
         />
         <Route
           path="/paymentLog"
           index
           element={
+            <AuthCheck>
             <ClientLayout
               head={{ title: "Dashboard", description: "Some Description." }}
               headerStyle={{ height: { base: "40px", md: 14 } }}
             >
               <PaymentLog />
             </ClientLayout>
+            </AuthCheck>
           }
         />
         <Route
           path="/cashout"
           index
           element={
+            <AuthCheck>
             <ClientLayout
               head={{ title: "Dashboard", description: "Some Description." }}
               headerStyle={{ height: { base: "40px", md: 14 } }}
             >
               <Cashout />
             </ClientLayout>
+            </AuthCheck>
           }
         />
         <Route
           path="/cashoutAmount"
           index
           element={
+            <AuthCheck>
             <ClientLayout
               head={{ title: "Dashboard", description: "Some Description." }}
               headerStyle={{ height: { base: "40px", md: 14 } }}
             >
               <CashoutAmount />
             </ClientLayout>
+            </AuthCheck>
           }
         />
         <Route
           path="/faq"
           index
           element={
+            <AuthCheck>
             <ClientLayout
               head={{ title: "Dashboard", description: "Some Description." }}
               headerStyle={{ height: { base: "40px", md: 14 } }}
             >
               <Faq />
             </ClientLayout>
+            </AuthCheck>
           }
         />
-        {/* <Route
-          path="/myProfile"
-          element={
-            <ClientLayout
-              head={{ title: "Dashboard", description: "Some Description." }}
-              headerStyle={{ height: { base: "40px", md: 14 } }}
-            >
-              <MyProfile />
-            </ClientLayout>
-          }
-        >
-          <Route path="" index element={<ProfileTab />} />
-          <Route path="order_history" element={<OrderHistory />} />
-          <Route path="pushNotification" element={<PushNotification />} />
-          <Route path="updatePassword" element={<UpdatePassword />} />
-          <Route
-            path="orderHistoryDetail/:id"
-            index
-            element={
-              <UserAuthCheck>
-                <OrderHistoryDetail />
-              </UserAuthCheck>
-            }
-          />
-        </Route> */}
+
       </Routes>
     </BrowserRouter>
   );

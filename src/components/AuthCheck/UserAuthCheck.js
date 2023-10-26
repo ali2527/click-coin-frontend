@@ -5,18 +5,18 @@ import { Navigate } from 'react-router'
 
 const UserAuthCheck = ({ children }) => {
     const navigate = useNavigate()
-    const { userToken } = useSelector((state) => state.user)
-    useEffect(() => {
-        // if (!userToken) {
-        //     navigate("/signin", { replace: true })
-        // }
-    })
-    // if(!userToken){
-    //     return <Navigate to="/signin" replace={true} />
-    // }
-    return (
-        <>{children}</>
-    )
+    const user = useSelector((state) => state.user.userData);
+    const token = useSelector((state) => state.user.userToken);
+
+    console.log(token)
+    
+    if(!token){
+        return <Navigate to="/" replace={true} />
+    }else{
+        return (
+            <>{children}</>
+        )
+    }
 }
 
 export default UserAuthCheck

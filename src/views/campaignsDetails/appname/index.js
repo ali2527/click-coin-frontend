@@ -1,11 +1,45 @@
-import { Col, Row, Image, Button, Input } from "antd";
-import { useNavigate } from "react-router";
+import React, { useState , useEffect } from "react";
+import { Col, Row, Image, Button, Input,Avatar } from "antd";
 import Camp2 from "../../../assets/camp2.png";
 import Apppic from "../../../assets/app-pic.png";
 import { SlArrowRight } from "react-icons/sl";
+import { useNavigate,useParams } from "react-router";
+import { Get } from "../../../config/api/get";
+import {CAMPAIGNS, UPLOADS_URL} from "../../../config/constants/api"
+import { useSelector, useDispatch } from "react-redux";
+
+
 
 const AnalyticsCarts = () => {
     const navigate = useNavigate();
+    const user = useSelector((state) => state.user.userData);
+    const token = useSelector((state) => state.user.userToken);
+    const {id} = useParams()
+    const [campaign, setCampaign] = useState([]);
+    const [loading, setLoading] = useState(false);
+
+
+
+    useEffect(() => {
+        getCampaignDetail();
+      }, []);
+    
+      const getCampaignDetail = async (pageNumber) => {
+        setLoading(true);
+        try {
+          const response = await Get(CAMPAIGNS.getCampaignById + id,token);
+          setLoading(false);
+          console.log("response", response);
+          if (response?.status) {
+            setCampaign(response?.data);
+          } else {
+            console.log("error====>", response);
+          }
+        } catch (error) {
+          console.log(error.message);
+          setLoading(false);
+        }
+      };
 
 
     const cardsdata = {
@@ -17,17 +51,20 @@ const AnalyticsCarts = () => {
         appinfo: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed quis justo ut nunc venenatis fringilla. Nullam eget urna vitae ex auctor fermentum. Pellentesque ut eros id justo placerat lacinia. Proin sed erat nec arcu posuere consectetur.",
     };
     return (
-        <div className="trustpeople-box">
+        <div className="trustpeople-box" style={{paddingBottom:"100px"}}>
             <Row style={{ width: "100%", justifyContent: "center" }}>
                 <Col xs={23} md={24}>
                     <div className="" style={{ textAlign: "center" }}>
                         <div className="detail-camp-pro-box">
-                            <Image
-                                preview={false}
-                                alt={"Failed to load image"}
-                                src={cardsdata.apppic}
-                                className=""
-                            />
+            
+
+<Avatar
+                                                            size={100}
+                                                                preview={false}
+                                                                alt={"Failed to load image"}
+                                                                src={!campaign.avatar ? "/images/avatar.png" : UPLOADS_URL + "/" + campaign.avatar}
+                                                                className=""
+                                                            />
                             <div>
                                 <h5>{cardsdata.camproname}</h5>
                                 <p>{cardsdata.appdownload}</p>
@@ -40,12 +77,15 @@ const AnalyticsCarts = () => {
                 <Col xs={23} md={22}>
                     <div className="" style={{ textAlign: "center", margin: "20px 0" }}>
                         <div className="campaigcard-banner">
-                            <Image
+                        {campaign.image && <Image
                                 preview={false}
                                 alt={"Failed to load image"}
-                                src={cardsdata.camp2}
+                                width={"100%"}
+                                height={700}
+                                style={{objectFit:'cover',borderRadius:"20px"}}
+                                src={UPLOADS_URL + "/" + campaign.image}
                                 className=""
-                            />
+                            />}
                         </div>
                     </div>
                 </Col>
@@ -95,13 +135,13 @@ const AnalyticsCarts = () => {
             <Row style={{ width: "100%", justifyContent: "center" ,margin: "10px 0" }}>
                 <Col xs={23} md={22}>
                     <h5 className="text-24">App Description</h5>
-                    <p className="web-p">{cardsdata.appdes}</p>
+                    <p className="web-p">{campaign.description}</p>
                 </Col>
             </Row>
             <Row style={{ width: "100%", justifyContent: "center" ,margin: "10px 0" }}>
                 <Col xs={23} md={22}>
                     <h5 className="text-24">More Info</h5>
-                    <p className="web-p">{cardsdata.appinfo}</p>
+                    <p className="web-p">{campaign.info}</p>
                 </Col>
             </Row>
 

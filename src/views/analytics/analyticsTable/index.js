@@ -28,27 +28,27 @@ const columns = [
     },
 ];
 const data = [
-    {
-        key: '1',
-        creators: 'John Brown',
-        adRevenue: '$76',
-        ranks: "4th",
-        earnings: '$76',
-    },
-    {
-        key: '2',
-        creators: 'Jim Green',
-        adRevenue: '$76',
-        ranks: "4th",
-        earnings: '$76',
-    },
-    {
-        key: '3',
-        creators: 'Joe Black',
-        adRevenue: '$76',
-        ranks: "4th",
-        earnings: '$76',
-    },
+    // {
+    //     key: '1',
+    //     creators: 'John Brown',
+    //     adRevenue: '$76',
+    //     ranks: "4th",
+    //     earnings: '$76',
+    // },
+    // {
+    //     key: '2',
+    //     creators: 'Jim Green',
+    //     adRevenue: '$76',
+    //     ranks: "4th",
+    //     earnings: '$76',
+    // },
+    // {
+    //     key: '3',
+    //     creators: 'Joe Black',
+    //     adRevenue: '$76',
+    //     ranks: "4th",
+    //     earnings: '$76',
+    // },
 ];
 
 const AnalyticsTable = () => {

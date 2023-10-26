@@ -20,12 +20,6 @@ function PaymentLog() {
     const token = useSelector((state) => state.user.userToken);
     const [loading, setLoading] = React.useState(false);
 
-    // useEffect if user is already logged in
-    React.useEffect(() => {
-        if (user && token) {
-            navigate("/", { replace: true });
-        }
-    }, [user, token]);
 
     const onFinish = (values) => {
         console.log("Success:", values);
@@ -61,10 +55,11 @@ function PaymentLog() {
     };
 
 
-    const [count, setCount] = useState(1);
+    const [count, setCount] = useState(0);
 
     const increment = () => {
-        setCount(count + 1);
+        swal("Oops","Not Enough Funds","error")
+        // setCount(count + 1);
     };
 
     const decrement = () => {
@@ -80,7 +75,7 @@ function PaymentLog() {
             <Row justify={"center"}>
                 <Col xs={23} md={22}>
                     <h2 className="out-heading">cashout</h2>
-                    <h2 className="">$500 available</h2>
+                    <h2 className="">$0 available</h2>
                 </Col>
             </Row>
 

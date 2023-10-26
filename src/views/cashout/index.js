@@ -20,12 +20,7 @@ function PaymentLog() {
     const token = useSelector((state) => state.user.userToken);
     const [loading, setLoading] = React.useState(false);
 
-    // useEffect if user is already logged in
-    React.useEffect(() => {
-        if (user && token) {
-            navigate("/", { replace: true });
-        }
-    }, [user, token]);
+
 
     const onFinish = (values) => {
         console.log("Success:", values);
@@ -79,7 +74,7 @@ function PaymentLog() {
             <Row justify={"center"}>
                 <Col xs={23} md={22}>
                     <div className="main-card">
-                        <div className="card-flex">
+                        {/* <div className="card-flex">
                             <Image
                                 preview={false}
                                 alt={"Failed to load image"}
@@ -90,26 +85,26 @@ function PaymentLog() {
                                 <h6>{cardsdata.cardname}</h6>
                                 <p>{cardsdata.cardnum}</p>
                             </div>
-                        </div>
+                        </div> */}
 
                         <div className="cashout-detail">
                             <h6>Cashout Amount</h6>
                             <div>
                                 <span className="change" onClick={() => navigate("/cashoutAmount")}>Change</span>
-                                <span>$20.00</span>
+                                <span>$0.00</span>
                             </div>
                         </div>
                         <div className="cashout-detail">
                             <h6>Platform Fees</h6>
                             <div>
-                                <span>$4.00</span>
+                                <span>$2.00</span>
                             </div>
                         </div>
                         <Divider></Divider>
                         <div className="cashout-detail">
-                            <h5>Platform Fees</h5>
+                            <h5>Total Amount</h5>
                             <div>
-                                <h5>$4.00</h5>
+                                <h5>$2.00</h5>
                             </div>
                         </div>
 
@@ -117,6 +112,7 @@ function PaymentLog() {
                                 type="primary"
                                 htmlType="button"
                                 className="web-btn"
+                                disabled
                                 style={{
                                     cursor: "pointer",
                                     width: "100%",

@@ -53,7 +53,7 @@ body{
   position:relative;
   display:flex;
   justify-content: center;
-  color:#0FB3AF;
+  color:#f36c46;
   margin:5px;
   width: 40px;
   height: 40px;
@@ -73,13 +73,13 @@ body{
 }
 .page-link:hover{
   z-index:2;
-  color:#0FB3AF;
+  color:#f36c46;
   background-color:#e9ecef;
-  border-color:#0FB3AF
+  border-color:#f36c46
 }
 .page-link:focus{
   z-index:3;
-  color:#0FB3AF;
+  color:#f36c46;
   background-color:#e9ecef;
   outline:0;
 
@@ -90,7 +90,7 @@ body{
 .page-item.active .page-link{
   z-index:3;
   color:#fff;
-  background-color:#0FB3AF;
+  background-color:#f36c46;
  
 }
 .page-item.disabled .page-link{

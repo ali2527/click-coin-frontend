@@ -1,29 +1,89 @@
 import { useState } from "react";
 import { Col, Row, Image, Button, Input, Form, Avatar, Upload } from "antd";
 import "react-alice-carousel/lib/alice-carousel.css";
-import { UPLOAD_URL } from "../../../config/constants/api";
+import { UPLOADS_URL,USER } from "../../../config/constants/api";
 import { TbCameraPlus } from "react-icons/tb";
 import profileimg from "../../../assets/profileimg.png";
+import { useNavigate } from "react-router";
+import { useSelector, useDispatch } from "react-redux";
+import { Post } from "../../../config/api/post";
+import {CONTENT_TYPE} from "../../../config/constants/index"
+import { addUser } from "../../../redux/slice/authSlice";
+import swal from "sweetalert"
 
 const ProfileSettingsbox = () => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const { Search } = Input;
+    const user = useSelector((state) => state.user.userData);
+    const token = useSelector((state) => state.user.userToken);
+    const [imageNew, setImageNew] = useState();
+
+
     const onFinish = (values) => {
-        console.log('Success:', values);
-    };
+   
+        const formObject = new FormData();
+
+        console.log(values)
+    
+        if(imageNew){
+          formObject.append("image",values.image.fileList[0].originFileObj);
+        }
+    
+        for (const key in values) {
+          if (key !== "image") {
+            const item = values[key];
+            formObject.append(key, item);
+          }
+        }
+    
+        for (const pair of formObject.entries()) {
+          console.log(`${pair[0]}, ${pair[1]}`);
+        }
+       
+
+
+    
+        Post(USER.updateProfile,formObject,token,null,CONTENT_TYPE.FORM_DATA)
+          .then((response) => {
+           
+            if (response?.data?.status) {
+              console.log(response?.data)
+              dispatch(
+                addUser({ user: response.data.data, token: token })
+              );
+    
+              swal("Success!", "Profile Updated Successfully", "success");
+
+              setImageNew()
+            } else {
+              swal("Oops!", response.data.message, "error");
+            }
+          })
+          .catch((e) => {
+    
+           console.log(e)
+          });
+      };
+    
+
+      
+
     const onFinishFailed = (errorInfo) => {
         console.log('Failed:', errorInfo);
     };
-    const [user, setUser] = useState({
-        id: 1,
-        fname: "Easin",
-        lname: "Arafat",
-        mnumber: "+ 1 23456 789",
-        email: "dummyemail@example",
-        gender: "Male",
-        date: "10-05-1990",
-    });
-    const [imageNew, setImageNew] = useState();
+
+
     return (
         <div className="trustpeople-box">
+            <Form
+                        name="basic"
+                        layout="vertical"
+                        initialValues={user}
+                        onFinish={onFinish}
+                        onFinishFailed={onFinishFailed}
+                        autoComplete="off"
+                    >
             <Row style={{ width: "100%", justifyContent: "center" }}>
                 <Col xs={23} md={6}>
                     <Form.Item name="image" className="profilepic">
@@ -54,13 +114,13 @@ const ProfileSettingsbox = () => {
                                 <TbCameraPlus />
                             </div>{" "}
                             <Avatar
-                                // size={120}
+                              
                                 src={
                                     imageNew
                                         ? imageNew
-                                        : !user?.image
-                                            ? profileimg
-                                            : UPLOAD_URL + "/" + user?.image
+                                        : (!user?.image
+                                            ?  "./images1/avatar.png"
+                                            : UPLOADS_URL + "/"  + user?.image)
                                 }
                                 className="avtr"
                             />
@@ -68,16 +128,7 @@ const ProfileSettingsbox = () => {
                     </Form.Item>
                 </Col>
                 <Col xs={23} md={18}>
-                    <Form
-                        name="basic"
-                        layout="vertical"
-                        initialValues={{
-                            remember: true,
-                        }}
-                        onFinish={onFinish}
-                        onFinishFailed={onFinishFailed}
-                        autoComplete="off"
-                    >
+                    
                         <Form.Item
                             label="Username"
                             name="username"
@@ -95,70 +146,79 @@ const ProfileSettingsbox = () => {
                             <Col xs={12} md={12}>
                                 <Form.Item
                                     label="First Name"
-                                    name="username"
+                                    name="firstName"
                                     rules={[
                                         {
                                             required: true,
-                                            message: 'Please input your username!',
+                                            message: 'Please input your first name!',
                                         },
                                     ]}
                                 >
-                                    <Input placeholder="Sana" className="web-input" style={{ width: "98%" }} />
+                                    <Input  className="web-input" style={{ width: "98%" }} />
                                 </Form.Item>
                             </Col>
                             <Col xs={12} md={12}>
                                 <Form.Item
                                     label="Last Name"
-                                    name="username"
+                                    name="lastName"
                                     rules={[
                                         {
                                             required: true,
-                                            message: 'Please input your username!',
+                                            message: 'Please input your last name!',
                                         },
                                     ]}
                                 >
-                                    <Input placeholder="Anjum" className="web-input" style={{ width: "98%" }} />
+                                    <Input  className="web-input" style={{ width: "98%" }} />
                                 </Form.Item>
                             </Col>
                         </Row>
 
                         <Form.Item
                             label="Email"
-                            name="username"
+                            name="email"
                             rules={[
                                 {
                                     required: true,
-                                    message: 'Please input your username!',
+                                    message: 'Please input your email!',
                                 },
                             ]}
                         >
-                            <Input placeholder="sanaanjum@surkush.com" className="web-input" />
+                            <Input disabled  className="web-input" />
                         </Form.Item>
 
                         <Form.Item
                             label="Contact Number"
-                            name="username"
+                            name="phone"
                             rules={[
                                 {
                                     required: true,
-                                    message: 'Please input your username!',
+                                    message: 'Please input your phone number!',
                                 },
                             ]}
                         >
-                            <Input placeholder="+971-7788777777" className="web-input" />
+                            <Input placeholder="Phone Number" className="web-input" />
                         </Form.Item>
 
                         <Form.Item
-                            label="Password"
-                            name="username"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Please input your username!',
-                                },
-                            ]}
+                            label="Tag"
+                            name="tag"
                         >
-                            <Input placeholder="+971-7788777777" className="web-input" />
+                            <Input placeholder="creator, editor etc" className="web-input" />
+                        </Form.Item>
+
+                        
+                        <Form.Item
+                            label="About"
+                            name="bio"
+                        >
+                            <Input placeholder="About you" className="web-input" />
+                        </Form.Item>
+
+                        <Form.Item
+                            label="More Info"
+                            name="info"
+                        >
+                            <Input placeholder="More about you" className="web-input" />
                         </Form.Item>
 
 
@@ -171,12 +231,13 @@ const ProfileSettingsbox = () => {
                                     cursor: "pointer",
                                 }}
                             >
-                                Save
+                                Update
                             </Button>
                         </Form.Item>
-                    </Form>
+                    
                 </Col>
             </Row>
+            </Form>
         </div>
     );
 };

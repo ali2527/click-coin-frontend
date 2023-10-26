@@ -23,24 +23,24 @@ const columns = [
     },
 ];
 const data = [
-    {
-        key: '1',
-        amount: '$19,623.00',
-        status: "Approved",
-        cashoutDate: 'Aug 10, 2023, 13:00',
-    },
-    {
-        key: '2',
-        amount: '$19,623.00',
-        status: "Approved",
-        cashoutDate: 'Aug 10, 2023, 13:00',
-    },
-    {
-        key: '3',
-        amount: '$19,623.00',
-        status: "Approved",
-        cashoutDate: 'Aug 10, 2023, 13:00',
-    },
+    // {
+    //     key: '1',
+    //     amount: '$19,623.00',
+    //     status: "Approved",
+    //     cashoutDate: 'Aug 10, 2023, 13:00',
+    // },
+    // {
+    //     key: '2',
+    //     amount: '$19,623.00',
+    //     status: "Approved",
+    //     cashoutDate: 'Aug 10, 2023, 13:00',
+    // },
+    // {
+    //     key: '3',
+    //     amount: '$19,623.00',
+    //     status: "Approved",
+    //     cashoutDate: 'Aug 10, 2023, 13:00',
+    // },
 ];
 
 const PaymentTable = () => {

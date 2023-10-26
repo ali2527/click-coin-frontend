@@ -12,9 +12,7 @@ import RequestForm from "../../views/requestLink/requestForm";
 
 // import router from "next/router";
 const text = `
-  A dog is a type of domesticated animal.
-  Known for its loyalty and faithfulness,
-  it can be found as a welcome guest in many households across the world.
+Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
 `;
 const items = [
     {
@@ -42,12 +40,6 @@ function CampaignsDetails() {
     const token = useSelector((state) => state.user.userToken);
     const [loading, setLoading] = React.useState(false);
 
-    // useEffect if user is already logged in
-    React.useEffect(() => {
-        if (user && token) {
-            navigate("/", { replace: true });
-        }
-    }, [user, token]);
 
     const onFinish = (values) => {
         console.log("Success:", values);
@@ -95,7 +87,7 @@ function CampaignsDetails() {
 
             <Row justify={"center"}>
                 <Col xs={23} md={22}>
-                    <h4 className="faq-heading">Hey Braydon!</h4>
+                    <h4 className="faq-heading">Hey {user.firstName}!</h4>
                     <p className="faq-subheading">How Can we Help you today?</p>
                     <Button
                         type="primary"

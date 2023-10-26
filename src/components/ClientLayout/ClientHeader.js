@@ -47,177 +47,15 @@ const ClientHeader = () => {
   const latestNotifications = [];
   const [logoutModal, setLogoutModal] = useState(false);
 
-  const items = [
-    {
-      key: "1",
-      label: (
-        <div
-          className="headerDropdown"
-          style={{
-            fontSize: "14px",
-            display: "flex",
-            alignItems: "center",
-            padding: "2px 8px",
-          }}
-          onClick={() => navigate("/myProfile")}
-        >
-          My Profile
-          {/* <FaUser style={{ fontSize: "14px" }} /> &nbsp; My Profile */}
-        </div>
-      ),
-    },
-    {
-      key: "2",
-      label: (
-        <div
-          className="headerDropdown"
-          style={{
-            fontSize: "14px",
-            display: "flex",
-            alignItems: "center",
-            padding: "2px 8px",
-          }}
-          onClick={() => navigate("/myProfile")}
-        >
-          Block Service provider
-        </div>
-      ),
-    },
-    {
-      key: "3",
-      label: (
-        <div
-          style={{
-            fontSize: "14px",
-            display: "flex",
-            alignItems: "center",
-            padding: "2px 8px",
-          }}
-          onClick={() => setLogoutModal(true)}
-        >
-          Logout
-        </div>
-      ),
-    },
-  ];
-
-  const content = (
-    <div style={{ width: "350px" }}>
-      <div
-        style={{
-          padding: "10px 20px",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <h3>Notifications</h3>
-        <Alert
-          message={`${notificationsCount} New`}
-          type="success"
-          style={{ fontSize: "12px", padding: "2px 10px", color: "green" }}
-        />
-      </div>
-      <hr
-        style={{
-          borderLeft: "none",
-          borderBottom: "none",
-          borderRight: "none",
-          borderTop: "1px solid rgb(0 0 0 / 15%)",
-        }}
-      />
-      <div style={{ height: "250px", overflow: "auto" }}>
-        {latestNotifications &&
-          latestNotifications.length > 0 &&
-          latestNotifications.map((item) => {
-            return (
-              <div
-                style={{
-                  padding: 10,
-                  minHeight: "100px",
-                  borderBottom: "1px solid #dadada",
-                  marginBottom: "5px",
-                }}
-              >
-                <Row
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <Col xs={4}>
-                    <div
-                      style={{
-                        // padding: "10px 10px 10px 10px",
-
-                        display: "flex",
-                        width: "40px",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        height: "40px",
-                        backgroundColor: "#385790",
-                        borderRadius: "5px",
-                      }}
-                    >
-                      <GoBellFill
-                        style={{ fontSize: "20px", color: "white" }}
-                      />
-                    </div>
-                  </Col>
-                  <Col xs={18}>
-                    <Typography.Title
-                      className="fontFamily1"
-                      style={{ fontSize: "14px", color: "black", margin: 0 }}
-                    >
-                      {item.title}
-                    </Typography.Title>
-
-                    <Typography.Text
-                      className="fontFamily1"
-                      style={{ fontSize: "12px", color: "black", margin: 0 }}
-                    >
-                      {item?.content?.slice(0, 100)}{" "}
-                      {item.content.length > 100 && "..."}
-                    </Typography.Text>
-                  </Col>
-                </Row>
-              </div>
-            );
-          })}
-      </div>
-
-      <hr
-        style={{
-          borderLeft: "none",
-          borderBottom: "none",
-          borderRight: "none",
-          borderTop: "1px solid rgb(0 0 0 / 15%)",
-        }}
-      />
-
-      <div
-        style={{
-          padding: "10px 20px",
-          display: "flex",
-          justifyContent: "flex-end",
-          alignItems: "center",
-        }}
-      >
-        <Button onClick={() => navigate("/notifications")} type="link">
-          View All
-        </Button>
-      </div>
-    </div>
-  );
 
   const logout = () => {
     setLogoutModal(false);
 
     dispatch(removeUser());
-    navigate("/signin");
+    navigate("/");
   };
 
-  return (
+  return (<>
     <Header
       style={{
         height: "auto",
@@ -334,12 +172,61 @@ const ClientHeader = () => {
           <Menu.Item key="settings" className="hover fontFamily1" onClick={() => { setVisible(false); navigate("/settings"); }}>
             Settings
           </Menu.Item>
-          <Menu.Item key="about" className="hover fontFamily1">
+          <Menu.Item key="about" className="hover fontFamily1"  onClick={() =>{setVisible(false); setLogoutModal(true)}}>
             Logout
           </Menu.Item>
         </Menu>
       </Drawer>
     </Header>
+    <Modal
+    centered
+        visible={logoutModal}
+        onOk={() => logout()}
+        onCancel={() => setLogoutModal(false)}
+        okText="Yes"
+        className="StyledModal"
+        style={{
+          left: 0,
+          right: 0,
+          marginLeft: "auto",
+          marginRight: "auto",
+          textAlign: "center",
+        }}
+        cancelText="No"
+        cancelButtonProps={{
+          style: {
+            border: "2px solid #f36c46",
+            color: "#f36c46",
+            height: "auto",
+            padding: "10px 40px",
+            borderRadius: "10px",
+            fontSize: "16px",
+            marginTop: "15px",
+          },
+        }}
+        okButtonProps={{
+          style: {
+            backgroundColor: "#f36c46",
+            color: "white",
+            marginTop: "15px",
+            height: "auto",
+            padding: "10px 40px",
+            borderRadius: "10px",
+            fontSize: "16px",
+            border: "2px solid #f36c46",
+          },
+        }}
+      >
+        <Typography.Title level={4} style={{ fontSize: "25px" }}>
+          Logout
+        </Typography.Title>
+        <Typography.Text style={{ fontSize: 16 }}>
+          Are You Sure You Want To Logout ?
+        </Typography.Text>
+      </Modal>
+    </>
+
+    
   );
 };
 

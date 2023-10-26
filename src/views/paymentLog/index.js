@@ -19,12 +19,7 @@ function PaymentLog() {
     const token = useSelector((state) => state.user.userToken);
     const [loading, setLoading] = React.useState(false);
 
-    // useEffect if user is already logged in
-    React.useEffect(() => {
-        if (user && token) {
-            navigate("/", { replace: true });
-        }
-    }, [user, token]);
+
 
     const onFinish = (values) => {
         console.log("Success:", values);
