@@ -1,0 +1,12 @@
+@font-face {
+    font-family: 'Super Comic';
+    src: url('SuperComic.eot');
+    src: url('SuperComic.eot?#iefix') format('embedded-opentype'),
+        url('SuperComic.woff2') format('woff2'),
+        url('SuperComic.woff') format('woff'),
+        url('SuperComic.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
