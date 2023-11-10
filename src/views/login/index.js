@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Layout, Col, Row, Button, Form, Input, Checkbox, Image, Divider } from "antd";
 import { useNavigate } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
@@ -8,7 +8,8 @@ import { addUser } from "../../redux/slice/authSlice";
 import Logo from "../../assets/logo-header.png";
 import Facebook from "../../assets/facebook.svg";
 import Gogle from "../../assets/gogle.png";
-
+import { GoogleLogin } from '@react-oauth/google';
+import { jwtDecode } from "jwt-decode";
 import swal from "sweetalert";
 
 function Login() {
@@ -17,6 +18,95 @@ function Login() {
   const user = useSelector((state) => state.user.userData);
   const token = useSelector((state) => state.user.userToken);
   const [loading, setLoading] = React.useState(false);
+  const [tokenClient, setTokenClient] = React.useState({});
+
+  const CLIENT_ID = "500994605618-nk6h74l0lusqqpv2u0ajof31iqu5i71l.apps.googleusercontent.com";
+  const SCOPES = "https://www.googleapis.com/auth/adsense https://www.googleapis.com/auth/adsense.readonly"
+
+
+const createAccess = () => {
+  tokenClient.requestAccessToken();
+}
+
+const handleCallbackResonse = (response) =>{
+  console.log("Encoded JWT ID Token: " + response.credential)
+  var userObject = jwtDecode(response.credential)
+  console.log(userObject)
+
+}
+
+  useEffect(() => {
+    /* global google */
+    google.accounts.id.initialize({
+      client_id:CLIENT_ID,
+      callback: handleCallbackResonse
+    })
+
+    google.accounts.id.renderButton(
+      document.getElementById("signInDiv"),
+      {theme:"outline", size:'large'}
+    )
+
+    setTokenClient(google.accounts.oauth2.initTokenClient({
+      client_id:CLIENT_ID,
+      scope: SCOPES,
+      callback:async (tokenResponse) => {
+        console.log(tokenResponse);
+
+        if(tokenResponse && tokenResponse.access_token){
+          const apiUrl = 'https://adsense.googleapis.com/v2/accounts';
+
+          const apiResponse = await fetch(apiUrl, {
+                  method: 'GET',
+                  headers: {
+                    Authorization: `Bearer ${tokenResponse.access_token}`,
+                  },
+                });
+          
+                // Parse and log the API response
+                const data = await apiResponse.json();
+                console.log('AdSense API Response:', data);
+
+
+        }
+      }
+    }))
+
+
+  }, [])
+  
+
+  // const handleGoogleLoginSuccess = async (response) => {
+  //   try {
+  //     // Extract the necessary information from the response
+  //     const { credential } = response;
+
+  //     console.log(credential,"here");
+
+  //     // Assuming credential contains the necessary information, such as access_token
+  //     const accessToken = credential;
+
+  //     // Replace 'your-api-endpoint' with the actual AdSense Management API endpoint
+  //     const apiUrl = 'https://adsense.googleapis.com/v2/accounts'; // Example endpoint
+
+  //     // Make a request to the AdSense Management API using the access token
+  //     const apiResponse = await fetch(apiUrl, {
+  //       method: 'GET',
+  //       headers: {
+  //         Authorization: `Bearer ${credential}`,
+  //       },
+  //     });
+
+  //     // Parse and log the API response
+  //     const data = await apiResponse.json();
+  //     console.log('AdSense API Response:', data);
+  //   } catch (error) {
+  //     console.error('Error processing Google login response:', error);
+  //   }
+  // };
+
+
+
 
   const onFinish = (values) => {
     console.log("Success:", values);
@@ -45,6 +135,7 @@ function Login() {
         setLoading(false);
       });
   };
+  
 
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
@@ -217,9 +308,16 @@ function Login() {
                 </Button>
               </div>
 
-              {/* <div>
+              <div style={{display:'flex', alignItems:'center',flexDirection:"column"}}>
                 <Divider>or</Divider>
 
+                <div id="signInDiv"></div>
+
+                <input type="submit"  onClick={createAccess} />
+
+
+
+{/* 
                 <Button
                   type="primary"
                   htmlType="button"
@@ -240,9 +338,15 @@ function Login() {
                     className=""
                   />
                   Sign in with Facebook
-                </Button>
-
-                <Button
+                </Button> */}
+ {/* <GoogleLogin
+      className="social-btn"
+      onSuccess={handleGoogleLoginSuccess}
+      onError={() => {
+        console.log('Login Failed');
+      }}
+    /> */}
+                {/* <Button
                   type="primary"
                   htmlType="button"
                   className="social-btn"
@@ -262,8 +366,8 @@ function Login() {
                     className=""
                   />
                   Sign in with Google
-                </Button>
-              </div> */}
+                </Button> */}
+              </div>
           
             </div>
           </Col>
