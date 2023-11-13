@@ -13,12 +13,16 @@ import { jwtDecode } from "jwt-decode";
 import swal from "sweetalert";
 
 function Login() {
+  const [form] = Form.useForm();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state) => state.user.userData);
   const token = useSelector((state) => state.user.userToken);
   const [loading, setLoading] = React.useState(false);
   const [tokenClient, setTokenClient] = React.useState({});
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+
 
   const CLIENT_ID = "500994605618-nk6h74l0lusqqpv2u0ajof31iqu5i71l.apps.googleusercontent.com";
   const SCOPES = "https://www.googleapis.com/auth/adsense https://www.googleapis.com/auth/adsense.readonly"
@@ -52,22 +56,10 @@ const handleCallbackResonse = (response) =>{
       scope: SCOPES,
       callback:async (tokenResponse) => {
         console.log(tokenResponse);
+        
 
         if(tokenResponse && tokenResponse.access_token){
-          const apiUrl = 'https://adsense.googleapis.com/v2/accounts';
-
-          const apiResponse = await fetch(apiUrl, {
-                  method: 'GET',
-                  headers: {
-                    Authorization: `Bearer ${tokenResponse.access_token}`,
-                  },
-                });
-          
-                // Parse and log the API response
-                const data = await apiResponse.json();
-                console.log('AdSense API Response:', data);
-
-
+          onFinish(tokenResponse.access_token)
         }
       }
     }))
@@ -76,64 +68,53 @@ const handleCallbackResonse = (response) =>{
   }, [])
   
 
-  // const handleGoogleLoginSuccess = async (response) => {
-  //   try {
-  //     // Extract the necessary information from the response
-  //     const { credential } = response;
-
-  //     console.log(credential,"here");
-
-  //     // Assuming credential contains the necessary information, such as access_token
-  //     const accessToken = credential;
-
-  //     // Replace 'your-api-endpoint' with the actual AdSense Management API endpoint
-  //     const apiUrl = 'https://adsense.googleapis.com/v2/accounts'; // Example endpoint
-
-  //     // Make a request to the AdSense Management API using the access token
-  //     const apiResponse = await fetch(apiUrl, {
-  //       method: 'GET',
-  //       headers: {
-  //         Authorization: `Bearer ${credential}`,
-  //       },
-  //     });
-
-  //     // Parse and log the API response
-  //     const data = await apiResponse.json();
-  //     console.log('AdSense API Response:', data);
-  //   } catch (error) {
-  //     console.error('Error processing Google login response:', error);
-  //   }
-  // };
 
 
+console.log(email)
 
 
-  const onFinish = (values) => {
-    console.log("Success:", values);
-    setLoading(true);
+  const onFinish =async (values) => {
+ google.accounts.oauth2.initTokenClient({
+      client_id:CLIENT_ID,
+      scope: SCOPES,
+      callback:async (tokenResponse) => {
+        console.log(tokenResponse);
+        
 
-    let data = {
-      email: values.email,
-      password: values.password,
-    };
-    Post(AUTH.signin, data)
-      .then((response) => {
-        setLoading(false);
-        console.log("response", response.data);
-        if (response?.data?.status) {
-          console.log("responsess", response.data?.data.user);
-          dispatch(
-            addUser({ user: response.data?.data?.user, token: response.data?.data.token })
-          );
-          navigate("/dashboard", { replace: true });
-        } else {
-          swal("Oops!", response.response.data.message, "error");
+        if(tokenResponse && tokenResponse.access_token){
+
+         let data = {
+          email: values.email,
+          password: values.password,
+        };
+        Post(AUTH.signin, data)
+          .then((response) => {
+            setLoading(false);
+            console.log("response", response.data);
+            if (response?.data?.status) {
+              console.log("responsess", response.data?.data.user);
+              dispatch(
+                addUser({ user: response.data?.data?.user, token: response.data?.data.token,accessToken:tokenResponse.access_token})
+              );
+              navigate("/dashboard", { replace: true });
+            } else {
+              swal("Oops!", response.data.message, "error");
+            }
+          })
+          .catch((e) => {
+            console.log(":::;", e);
+            setLoading(false);
+          });
+
+
         }
-      })
-      .catch((e) => {
-        console.log(":::;", e);
-        setLoading(false);
-      });
+      }}).requestAccessToken();
+      
+      
+    setLoading(true);
+  
+
+ 
   };
   
 
@@ -177,6 +158,7 @@ const handleCallbackResonse = (response) =>{
                 </Col>
               </Row>
               <Form
+               form={form}
                 layout="vertical"
                 name="basic"
                 labelCol={{
@@ -210,6 +192,8 @@ const handleCallbackResonse = (response) =>{
                   <Input
                     size="large"
                     placeholder="Enter Username"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     style={{
                       borderRadius: "12px",
                       background: "white",
@@ -238,6 +222,8 @@ const handleCallbackResonse = (response) =>{
                   <Input.Password
                     size="large"
                     placeholder="Enter Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                     style={{
                       borderRadius: "12px",
                       background: "white",
@@ -279,6 +265,7 @@ const handleCallbackResonse = (response) =>{
                       cursor: "pointer",
                       width: "100%",
                     }}
+                    // onClick={createAccess} 
                     // onClick={() => navigate("/dashboard")}
                   >
                     {loading ? "Loading..." : "Continue"}
@@ -309,14 +296,9 @@ const handleCallbackResonse = (response) =>{
               </div>
 
               <div style={{display:'flex', alignItems:'center',flexDirection:"column"}}>
-                <Divider>or</Divider>
+                {/* <Divider>or</Divider> */}
 
-                <div id="signInDiv"></div>
-
-                <input type="submit"  onClick={createAccess} />
-
-
-
+                {/* <div id="signInDiv"></div> */}
 {/* 
                 <Button
                   type="primary"

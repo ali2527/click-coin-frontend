@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   userData: {},
+  accessToken:{},
   userToken: null,
 }
 
@@ -11,14 +12,16 @@ export const userSlice = createSlice({
   reducers: {
     addUser: (state, { payload }) => {
       console.log("payload",payload)
-      state.userData = payload.user
-      state.userToken = payload.token
+      state.userData = payload.user;
+      state.userToken = payload.token;
+      state.accessToken = payload.accessToken;
     },
     updateUserData: (state, { payload }) => {
       state.userData = payload.user.user
     },
     removeUser: (state) => {
       state.userData = {};
+      state.accessToken = {};
       state.userToken = null;
       localStorage.clear();
     

@@ -7,7 +7,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { UPLOADS_URL } from "../../../config/constants/api";
 
 
-const Trustedpeople = () => {
+const Trustedpeople = ({totalEarning,totalClicks,totalImpressions}) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const user = useSelector((state) => state.user.userData);
@@ -18,17 +18,17 @@ const Trustedpeople = () => {
         {
             imageSrc: Vectr1,
             title: "Total Earnings",
-            dolarnumbers: "$0",
+            dolarnumbers: totalEarning?.amount || "-",
         },
+            {
+                imageSrc: Vectr1,
+                title: "Total Clicks",
+                dolarnumbers: totalClicks  ? totalClicks : "-",
+            },
         {
             imageSrc: Vectr1,
-            title: "Weekly Earnings",
-            dolarnumbers: "0",
-        },
-        {
-            imageSrc: Vectr1,
-            title: "Balance",
-            dolarnumbers: "0",
+            title: "Total Impressions",
+            dolarnumbers: totalImpressions ? totalImpressions : "-",
         },
     ];
 

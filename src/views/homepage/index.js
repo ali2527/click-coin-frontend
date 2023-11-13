@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 // import AuthLayout from "../../components/";
 import { Layout, Input, Row, Col, Button } from "antd";
 import { useNavigate } from "react-router";
@@ -19,39 +19,72 @@ function Homepage() {
   const { Search } = Input;
   const user = useSelector((state) => state.user.userData);
   const token = useSelector((state) => state.user.userToken);
+  const accessToken = useSelector((state) => state.user.accessToken);
+  const [totalEarning, setTotalEarning] = React.useState({});
+  const [totalClicks, setTotalClicks] = React.useState();
+  const [totalImpressions, setTotalImpressions] = React.useState();
+
   const [loading, setLoading] = React.useState(false);
 
-  // useEffect if user is already logged in
+useEffect(() => {
+if(accessToken){
+  getEarningData()
+  getClicksData()
+  getImpressionsData()
+}
+},[accessToken])
 
 
-  const onFinish = (values) => {
-    console.log("Success:", values);
-    setLoading(true);
+const getEarningData = async () => {
+const apiUrl = 'https://adsense.googleapis.com/v2/accounts/pub-1427684305578818/payments';
 
-    let data = {
-      email: values.email,
-      password: values.password,
-      devideId: "123456789",
-    };
-    Post(AUTH.signin, data)
-      .then((response) => {
-        setLoading(false);
-        if (response?.data) {
-          console.log("response", response.data.token);
-          console.log("response", response.data.user);
-          dispatch(
-            addUser({ user: response.data.user, token: response.data.token })
-          );
-          navigate("/", { replace: true });
-        } else {
-          swal("Oops!", response.response.data.message, "error");
-        }
-      })
-      .catch((e) => {
-        console.log(":::;", e);
-        setLoading(false);
-      });
+          const apiResponse = await fetch(apiUrl, {
+                  method: 'GET',
+                  headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                  },
+                });
+          
+                // Parse and log the API response
+                const data = await apiResponse.json();
+                setTotalEarning(data.payments ?  data?.payments[0] : "-")
+
+};
+
+
+const getClicksData = async () => {
+  const apiUrl = 'https://content-adsense.googleapis.com/v2/accounts/pub-1427684305578818/reports:generate?metrics=CLICKS&dateRange=LAST_30_DAYS&currencyCode=USD&reportingTimeZone=ACCOUNT_TIME_ZONE';
+  
+            const apiResponse = await fetch(apiUrl, {
+                    method: 'GET',
+                    headers: {
+                      Authorization: `Bearer ${accessToken}`,
+                    },
+                  });
+            
+                  // Parse and log the API response
+                  const data = await apiResponse.json();
+                  if(data?.totals?.cells)
+                  setTotalClicks(data?.totals?.cells[0].value)
+  
   };
+
+  const getImpressionsData = async () => {
+    const apiUrl = 'https://content-adsense.googleapis.com/v2/accounts/pub-1427684305578818/reports:generate?metrics=IMPRESSIONS&dateRange=LAST_30_DAYS&currencyCode=USD&reportingTimeZone=ACCOUNT_TIME_ZONE';
+    
+              const apiResponse = await fetch(apiUrl, {
+                      method: 'GET',
+                      headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                      },
+                    });
+              
+                    // Parse and log the API response
+                    const data = await apiResponse.json();
+                    if(data?.totals?.cells)
+                    setTotalImpressions(data?.totals?.cells[0].value)
+    
+    };
 
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
@@ -62,7 +95,7 @@ function Homepage() {
       className=""
       style={{ backgroundColor: "#fff", minHeight: "100vh" }}
     >
-      <DashboardProfilepic />
+      <DashboardProfilepic totalEarning={totalEarning} totalClicks={totalClicks} totalImpressions={totalImpressions} />
 
       <Row justify={"center"}>
         <Col xs={23} md={22}>
@@ -81,8 +114,8 @@ function Homepage() {
             </Button>
             {/* <p>Last cash out done on 24/08/2023 at 11:00</p> */}
 
-            <ProfileCards />
-            <DashboardTable />
+            <ProfileCards  />
+            <DashboardTable  />
           </div>
         </Col>
       </Row>
